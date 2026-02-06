@@ -52,7 +52,7 @@ def check_password_strength(password):
     """
     # TODO: Implement this function
     score = 0
-    feedback = ["add more characters", "include numbers", "include uppercase letters",
+    feedback = ["include numbers", "include uppercase letters",
                 "include lowercase letters", "include special characters", "avoid common passwords"]
     strength = "Weak"
 
