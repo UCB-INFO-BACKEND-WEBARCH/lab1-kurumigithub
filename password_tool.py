@@ -51,7 +51,56 @@ def check_password_strength(password):
     Hint: Use .isdigit(), .isupper(), .islower() and string.punctuation
     """
     # TODO: Implement this function
-    pass
+    score = 0
+    feedback = ["add more characters", "include numbers", "include uppercase letters",
+                "include lowercase letters", "include special characters", "avoid common passwords"]
+    strength = "Weak"
+
+    if password is None:
+        return {
+            "password": password,
+            "score": score,
+            "strength": "Weak",
+            "feedback": "Password cannot be None."
+        }
+    if len(password) >= 8 and len(password) < 12:
+        score += 20
+    elif len(password) >= 12:
+        score += 30
+
+    if any(char.isdigit() for char in password):
+        score += 20
+        feedback.remove("include numbers")
+
+    if any(char.isupper() for char in password):
+        score += 20
+        feedback.remove("include uppercase letters")
+
+    if any(char.islower() for char in password):
+        score += 20
+        feedback.remove("include lowercase letters")
+
+    if any(char in string.punctuation for char in password):
+        score += 20
+        feedback.remove("include special characters")
+
+    if password not in COMMON_PASSWORDS:
+        score += 10
+        feedback.remove("avoid common passwords")
+
+    if score >= 70:
+        strength = "Strong"
+        if score > 100:
+            score = 100  # Cap score at 100
+    elif score >= 40:
+        strength = "Medium"
+    
+    return {
+        "password": password,
+        "score": score,
+        "strength": strength,
+        "feedback": ", ".join(feedback) if feedback else "Your password is strong!"
+    }
 
 
 # ============================================
@@ -83,7 +132,23 @@ def generate_password(length=12, use_special=True):
           string.digits, and random.choice()
     """
     # TODO: Implement this function
-    pass
+    if length < 8:
+        length = 8  # Enforce minimum length
+    
+    all_characters = string.ascii_uppercase + string.ascii_lowercase + string.digits
+    if use_special:
+        all_characters += string.punctuation
+
+    if use_special:
+        password = ''.join(random.choice(all_characters) for _ in range(length - 4))
+        password += random.choice(string.punctuation)
+    else:
+        password = ''.join(random.choice(all_characters) for _ in range(length - 3))
+    
+    password += random.choice(string.ascii_uppercase)
+    password += random.choice(string.ascii_lowercase)
+    password += random.choice(string.digits)
+    return password
 
 
 # ============================================
